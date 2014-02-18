@@ -32,7 +32,7 @@ public class Cabine {
     private Ascenseur ascenseur;
 
     private int vitesse;
-    
+
     private int distanceParcourue;
     private int nombrePassagersSorties;
 
@@ -52,8 +52,6 @@ public class Cabine {
     public void setNombrePassagersSorties(int nombrePassagersSorties) {
         this.nombrePassagersSorties = nombrePassagersSorties;
     }
-    
-    
 
     public Ascenseur getAscenseur() {
         return ascenseur;
@@ -65,7 +63,8 @@ public class Cabine {
 
     /**
      * Récupère la distance parcourue au total.
-     * @return 
+     *
+     * @return
      */
     public int getDistanceParcourue() {
         return distanceParcourue;
@@ -74,8 +73,6 @@ public class Cabine {
     public void setDistanceParcourue(int distanceParcourue) {
         this.distanceParcourue = distanceParcourue;
     }
-    
-    
 
     /**
      * Parcours le tableau de passagers et retourne la liste des cases non null.
@@ -138,35 +135,79 @@ public class Cabine {
     public void action(Echeancier e, Etage etage, int date) {
         //La cabine change d'étage
         this.setEtage(etage);
-        
+
         this.setDistanceParcourue(this.getDistanceParcourue() + 1);
 
         //On fait descendre les passagers qui veulent aller à l'étage courant
-        for(int i=0;i<this.passagers.length;i++) {
+        for (int i = 0; i < this.passagers.length; i++) {
             Passager p = this.passagers[i];
-            if(p != null ) {
-                if(p.getEtageDestination().equals(etage)) {
+            if (p != null) {
+                if (p.getEtageDestination().equals(etage)) {
                     //Il veut aller ici
                     this.passagers[i] = null;
                     this.setNombrePassagersSorties(this.getNombrePassagersSorties() + 1);
                 }
             }
         }
-        
+
         //Remplissage de la cabine
         etage.remplirCabine(this);
-        
-        //int new_date = date + this.ascenseur.getCabine().getEtage().getArrivees().suivant();
-        
-        //On traite à nouveau les appels 
-        if(this.traiterAppels(e, date) == 0) {
-            this.demarrer(e,  date);
+
+        //Si la cabine n'est pas vide
+        if (!estVide()) {
+            //On traite les appels internes
+            if (!traiterAppelsInternes(e, date)) {
+                this.inversePriorite();
+                boolean traiterAppelsInternes = traiterAppelsInternes(e, date);
+            }
+        } else {
+            //On traite les appels externes
         }
-        
-        //Si la cabine ne bouge pas, on la relance.
-        if(!enMouvement()) {
-            this.demarrer(e,  date);
+
+    }
+    
+    /**
+     * On traite les appels externes, 
+     * 
+     * @param e
+     * @param date
+     * @return 
+     */
+    public boolean traiterAppelsExternes(Echeancier e, int date) {
+        if(this.getPriorite() == '^') {
+            //On parcourt les étages supérieurs
+            Etage etage;
+            while((etage = this.ascenseur.getEtageSuivant(this.getEtage())) != null) {
+                
+            }
         }
+        return false;
+    }
+
+    /**
+     * On traite les demandes des passagers dans la cabine
+     *
+     * @param e
+     * @param date
+     * @return
+     */
+    public boolean traiterAppelsInternes(Echeancier e, int date) {
+
+        for (Passager passager : this.passagers) {
+            if (passager != null) {
+                //S'il veut monter et que la cabine monte, => new PCP
+                if (passager.getEtageDestination().getNumero() > this.etage.getNumero() && this.getPriorite() == '^') {
+                    e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtageSuivant(etage)));
+                    return true;
+                } else if (passager.getEtageDestination().getNumero() < this.etage.getNumero() && this.getPriorite() == 'v') {
+                    e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtagePrecedant(etage)));
+                    return true;
+                }
+
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -198,33 +239,8 @@ public class Cabine {
             }
         } else {
             //Cabine vide ! On doit traiter les appels
-            traiterAppels(e, date);
+            //traiterAppels(e, date);
         }
-    }
-
-    public int traiterAppels(Echeancier echeancier, int date) {
-        for (Etage e : ascenseur.getEtages()) {
-            //Etage vide ?
-            boolean etageVide = e.estVide();
-
-            if (!etageVide) {
-                int numeroEtage = e.getNumero();
-
-                if (numeroEtage > this.getEtage().getNumero()) {
-                    //On doit monter ! + ajout de l'événement
-                    this.setPriorite('^');
-                    echeancier.ajouter(new EvenementPassage(date, ascenseur.getEtageSuivant(this.getEtage())));
-                } else {
-                    //On doit descendre.
-                    this.setPriorite('v');
-                    echeancier.ajouter(new EvenementPassage(date, ascenseur.getEtagePrecedant(this.getEtage())));
-                }
-
-                return 1;
-            }
-        }
-
-        return 0;
     }
 
     /**
@@ -329,6 +345,17 @@ public class Cabine {
         }
 
         return false;
+    }
+
+    /**
+     * Inverse la priorité de la cabine.
+     */
+    public void inversePriorite() {
+        if (this.getPriorite() == 'v') {
+            this.setPriorite('^');
+        } else {
+            this.setPriorite('v');
+        }
     }
 
 }
