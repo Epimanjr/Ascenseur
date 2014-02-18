@@ -16,17 +16,17 @@ public class Etage {
     /**
      * Numéro de l'étage.
      */
-    private int numero;
+    private final int numero;
     
     /**
      * File d'attente du palier correspondant.
      */
-    private LinkedList<Passager> fileAttente;
+    private final LinkedList<Passager> fileAttente;
     
     /**
      * Loi de poisson.
      */
-    private LoiDePoisson arrivees;
+    private final LoiDePoisson arrivees;
 
     /**
      * Constructeur qui initialise un étage en fonction du numéro entré en paramètre.
@@ -95,10 +95,7 @@ public class Etage {
             return false;
         }
         final Etage other = (Etage) obj;
-        if (this.numero != other.numero) {
-            return false;
-        }
-        return true;
+        return this.numero == other.numero;
     }
     
     public String affiche(Etage cabine) {
@@ -133,6 +130,7 @@ public class Etage {
      * Méthode qui affiche un étage
      * @return 
      */
+    @Override
     public String toString() {
         return ("Etage "+numero+" ");
     }

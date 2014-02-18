@@ -1,5 +1,3 @@
 #!/bin/bash
 
-javac -cp "src" -d "build/classes" src/MonAscenseur/*.java
-
 java -cp "build/classes" MonAscenseur/Principale

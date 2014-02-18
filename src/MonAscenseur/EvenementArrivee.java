@@ -48,6 +48,7 @@ public class EvenementArrivee extends Evenement {
     /**
      * Affichage d'un événement APP.
      */
+    @Override
     public void affiche() {
         System.out.println("["+this.passager.getNumero() + ", APP], ");
     }

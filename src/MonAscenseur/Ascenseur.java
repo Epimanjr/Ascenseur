@@ -97,6 +97,8 @@ public class Ascenseur {
         }
         
         s += cabine.toString();
+        s += "Distance parcourue : " + cabine.getDistanceParcourue() + "\n";
+        s += "Nombre de passagers descendus : " + cabine.getNombrePassagersSorties() + "\n";
         System.out.println(s);
     }
 

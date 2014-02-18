@@ -156,16 +156,16 @@ public class Cabine {
         //Remplissage de la cabine
         etage.remplirCabine(this);
         
-        int new_date = date + this.ascenseur.getCabine().getEtage().getArrivees().suivant();
+        //int new_date = date + this.ascenseur.getCabine().getEtage().getArrivees().suivant();
         
         //On traite à nouveau les appels 
-        if(this.traiterAppels(e, new_date) == 0) {
-            this.demarrer(e,  new_date);
+        if(this.traiterAppels(e, date) == 0) {
+            this.demarrer(e,  date);
         }
         
         //Si la cabine ne bouge pas, on la relance.
         if(!enMouvement()) {
-            this.demarrer(e,  new_date);
+            this.demarrer(e,  date);
         }
     }
 
@@ -178,7 +178,6 @@ public class Cabine {
     public void demarrer(Echeancier e, int date) {
         //On créer un passager, et on calcule la nouvelle date de l'échéancier
         Passager p = null;
-        int new_date = date + this.ascenseur.getCabine().getEtage().getArrivees().suivant();
 
         if (!this.estVide()) {
             //Cabine non vide, on cherche un passager et on traite sa demande
@@ -191,15 +190,15 @@ public class Cabine {
             if (etagePassager > this.getEtage().getNumero()) {
                 //On doit monter ! + ajout de l'événement
                 this.setPriorite('^');
-                e.ajouter(new EvenementPassage(new_date, ascenseur.getEtageSuivant(this.getEtage())));
+                e.ajouter(new EvenementPassage(date, ascenseur.getEtageSuivant(this.getEtage())));
             } else {
                 //On doit descendre.
                 this.setPriorite('v');
-                e.ajouter(new EvenementPassage(new_date, ascenseur.getEtagePrecedant(this.getEtage())));
+                e.ajouter(new EvenementPassage(date, ascenseur.getEtagePrecedant(this.getEtage())));
             }
         } else {
             //Cabine vide ! On doit traiter les appels
-            traiterAppels(e, new_date);
+            traiterAppels(e, date);
         }
     }
 
