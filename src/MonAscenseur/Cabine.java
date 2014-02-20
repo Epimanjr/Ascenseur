@@ -176,8 +176,8 @@ public class Cabine {
     public boolean traiterAppelsExternes(Echeancier e, int date) {
         if(this.getPriorite() == '^') {
             //On parcourt les étages supérieurs
-            Etage etage;
-            while((etage = this.ascenseur.getEtageSuivant(this.getEtage())) != null) {
+            Etage et;
+            while((et = this.ascenseur.getEtageSuivant(this.getEtage())) != null) {
                 
             }
         }
