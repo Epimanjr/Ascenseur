@@ -150,7 +150,7 @@ public class Cabine {
         }
 
         //Remplissage de la cabine
-        etage.remplirCabine(this);
+        this.remplirCabine(etage.getFileAttente());
 
         boolean traiterAppels = false;
 

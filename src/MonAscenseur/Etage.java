@@ -46,14 +46,6 @@ public class Etage {
         return fileAttente.isEmpty();
     }
     
-    /**
-     * Rempli la cabine avec la présente file d'attente.
-     * @param cabine 
-     */
-    public void remplirCabine(Cabine cabine) {
-        cabine.remplirCabine(fileAttente);
-    }
-    
     public void ajouterPassager(Passager p) {
         this.fileAttente.add(p);
     }
