@@ -153,15 +153,23 @@ public class Cabine {
         //Remplissage de la cabine
         etage.remplirCabine(this);
 
+        boolean traiterAppels = false;
+        
         //Si la cabine n'est pas vide
         if (!estVide()) {
             //On traite les appels internes
             if (!traiterAppelsInternes(e, date)) {
                 this.inversePriorite();
-                boolean traiterAppelsInternes = traiterAppelsInternes(e, date);
+                traiterAppels = traiterAppelsInternes(e, date);
             }
         } else {
             //On traite les appels externes
+            traiterAppels = traiterAppelsExternes(e, date);
+        }
+        
+        //Si il n'y pas eu d'appels à traiter, cabine à l'arrêt
+        if (traiterAppels == false) {
+            this.setPriorite('-');
         }
 
     }
@@ -178,7 +186,21 @@ public class Cabine {
             //On parcourt les étages supérieurs
             Etage et;
             while((et = this.ascenseur.getEtageSuivant(this.getEtage())) != null) {
-                
+                //Si des gens attendent sur le palier
+                if(et.getFileAttente().size()>0) {
+                    e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtageSuivant(etage)));
+                    return true;
+                }
+            }
+        } else if (this.getPriorite() == 'v') {
+            //On parcourt les étages inférieurs
+            Etage et;
+            while((et = this.ascenseur.getEtagePrecedant(this.getEtage())) != null) {
+                //Si des gens attendent sur le palier
+                if(et.getFileAttente().size()>0) {
+                    e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtagePrecedant(etage)));
+                    return true;
+                } 
             }
         }
         return false;
