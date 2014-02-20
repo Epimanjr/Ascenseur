@@ -54,12 +54,16 @@ public class Ascenseur {
         }
     }
 
-    public void ajouterPassager(Etage depart, Passager p) {
+    public boolean ajouterPassager(Passager p) {
+        Etage depart = p.getEtageDepart();
         for (Etage e : etages) {
             if (e.equals(depart)) {
                 e.ajouterPassager(p);
+                return true;
             }
         }
+        
+        return false;
     }
 
     public Cabine getCabine() {

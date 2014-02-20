@@ -34,7 +34,10 @@ public class EvenementArrivee extends Evenement {
   
         //Ajout du passager à la file d'attente du palier
         Etage etageDepart = this.passager.getEtageDepart();
-        a.ajouterPassager(etageDepart, this.passager);
+        
+        if(!a.ajouterPassager(this.passager)) {
+            System.out.println("Erreur ajout passager !!!");
+        }
         
         //On remet la cabine en mouvement si elle est à l'arrêt (-)
         if(!a.getCabine().enMouvement()) {
