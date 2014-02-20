@@ -6,6 +6,10 @@
 
 package MonAscenseur;
 
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -47,10 +51,16 @@ public class PassagerTest {
         
         for(int i=0;i<100;i++) {
             int num = Passager.genererEtage().getNumero();
-            assert(num >= (-1) && num <= 8);
+            assert(num >= (-1) && num <= 6);
         }
         
-        
+        Scanner sc = new Scanner(System.in);
+ 
+        for(int i=0;i<100;i++) {
+            Passager p = new Passager(i);
+            System.out.println(p);
+            
+        }
     }
 
     /**

@@ -46,8 +46,6 @@ public class Passager {
 
     /**
      * Constructeur qui initialise un passager avec toutes les informations (étages et date)
-     * @param etageDepart objet Etage
-     * @param etageDestination objet Etage
      * @param dateApparition 
      */
     public Passager(int dateApparition) {
@@ -55,18 +53,31 @@ public class Passager {
         numero = compteurDePassagersConstruits;
         
         this.etageDepart = genererEtage();
-        this.etageDestination = genererEtage();
+        
+        boolean trouve = false;
+        Etage tmp = null;
+        while(!trouve) {
+            tmp = genererEtage();
+            if(!this.etageDepart.equals(tmp)) {
+                this.etageDestination = tmp;
+                trouve = true;
+            }
+        }
+        //this.etageDestination = genererEtage();
         this.dateApparition = dateApparition;
     }
     
     public static Etage genererEtage() {
-        return new Etage((int)(( Math.random() * 10 )-1));
+        int nombre1 = (int)(( Math.random() * 8 )+1);
+        
+        return new Etage(nombre1 - 2);
     }
     
     /**
      * Méthode qui retourne une chaîne de caractères qui permet d'afficher un passager.
      * @return 
      */
+    @Override
     public String toString() {
         char c = 'v';
         if(etageDestination.getNumero() > etageDepart.getNumero()) {
