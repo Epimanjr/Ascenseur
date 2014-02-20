@@ -40,6 +40,13 @@ public class Cabine {
 
         this.etage = etage;
         this.passagers = new Passager[8]; // 8 personnes dans la cabine
+        for(Passager p : this.passagers) {
+            if( p == null) {
+                System.out.println(getColor(96)+"\tPassager null !"+getColor(0));
+            } else {
+                System.out.println(getColor(96)+"\tPassager NOT null !"+getColor(0));
+            }
+        }
         this.priorite = '-';
         this.vitesse = vitesse;
     }
@@ -90,7 +97,11 @@ public class Cabine {
     }
 
     public int placeLibreDansCabine() {
-        return this.passagers.length - nombrePassagers();
+        System.out.println(getColor(96)+"\tNombre passagers :  !"+nombrePassagers()+getColor(0));
+        
+        int placeLibre = this.passagers.length - nombrePassagers();
+        System.out.println(getColor(96)+"\tPlace libre  :  !"+placeLibre+getColor(0));
+        return placeLibre ;
     }
 
     public boolean estVide() {
@@ -105,6 +116,7 @@ public class Cabine {
 
         //Tant qu'il y a de la place
         while ((placeLibreDansCabine() > 0) && (i < list.size())) {
+            System.out.println(getColor(94)+"\t\twhile - remplir"+getColor(0));
             //On parcourt la liste d'attente de l'étage !
 
             //On récupère le passager
@@ -112,6 +124,7 @@ public class Cabine {
 
             if (this.doitPrendrePassager(passager)) {
                 //Alors on ajoute le passager dans la cabine
+                System.out.println(getColor(92)+"\tDoit prendre passager !"+getColor(0));
                 this.ajoutePassager(passager);
                 //Et on l'enlève de la file d'attente
                 list.remove(i);
@@ -125,13 +138,26 @@ public class Cabine {
 
     @SuppressWarnings("empty-statement")
     public void ajoutePassager(Passager p) {
+        System.out.println(getColor(91)+"Début Ajoute Passager"+getColor(0));
         if (this.placeLibreDansCabine() > 0) {
 
-            for (int i = 0; passagers[i] != null; i++) {
-                passagers[i] = p;
+            boolean ajoute = false;
+            int it = 0;
+            while(!ajoute) {
+                if(this.passagers[it] == null) {
+                    this.passagers[it] = p;
+                    ajoute = true;
+                    System.out.println(getColor(92)+"\tPassager ajouté !"+getColor(0));
+                } else {
+                    it++;
+                }
             }
+            
+            
 
         }
+        
+        System.out.println(getColor(91)+"Fin Ajoute passager"+getColor(0));
     }
 
     public void action(Echeancier e, Etage etage, int date) {
@@ -363,7 +389,7 @@ public class Cabine {
         int etage = this.getEtage().getNumero();
         int etagePassager = p.getEtageDestination().getNumero();
 
-        if (etage == min || etage == max || (monte() && etagePassager > etage) || (descend() && etagePassager < etage) || !this.enMouvement()) {
+        if (etage == min || etage == max || (monte() && etagePassager > etage) || (descend() && etagePassager < etage) || !this.enMouvement() || this.estVide()) {
             return true;
         }
 
