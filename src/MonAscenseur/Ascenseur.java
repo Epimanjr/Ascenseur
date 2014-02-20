@@ -26,8 +26,10 @@ public class Ascenseur {
     }
 
     /**
-     * Retourne le tableau d'étages de l'ascenseur, tous les étages sont valides.
-     * @return 
+     * Retourne le tableau d'étages de l'ascenseur, tous les étages sont
+     * valides.
+     *
+     * @return
      */
     public Etage[] getEtages() {
         return etages;
@@ -36,7 +38,6 @@ public class Ascenseur {
     public void setEtages(Etage[] etages) {
         this.etages = etages;
     }
-    
 
     /**
      * Méthode qui génére la liste des étages en fonction du nombre d'étage et
@@ -52,10 +53,10 @@ public class Ascenseur {
             numEtageLePlusBas++;
         }
     }
-    
+
     public void ajouterPassager(Etage depart, Passager p) {
-        for(Etage e: etages) {
-            if(e.equals(depart)) {
+        for (Etage e : etages) {
+            if (e.equals(depart)) {
                 e.ajouterPassager(p);
             }
         }
@@ -64,27 +65,35 @@ public class Ascenseur {
     public Cabine getCabine() {
         return cabine;
     }
-    
+
     /**
      * Récupère l'étage suivant de l'ascenseur.
+     *
      * @param etage
      * @return l'étage suivant
      */
     public Etage getEtageSuivant(Etage etage) {
-        return this.etages[etage.getNumero() + 1 - this.numEtageLePlusBas];
+        int nb = etage.getNumero() + 1 - this.numEtageLePlusBas;
+        if (nb < this.etages.length) {
+            return this.etages[nb];
+        }
+        return null;
     }
-    
-    
+
     /**
      * Récupère l'étage précédant de l'ascenseur.
+     *
      * @param etage
      * @return l'étage suivant
      */
     public Etage getEtagePrecedant(Etage etage) {
-        return this.etages[etage.getNumero() - 1 - this.numEtageLePlusBas];
+        int nb = etage.getNumero() - 1 - this.numEtageLePlusBas;
+        if (nb >= 0) {
+            return this.etages[nb];
+        }
+        return null;
     }
 
-    
     /**
      * Méthode qui affiche l'ascenseur
      *
@@ -92,10 +101,10 @@ public class Ascenseur {
      */
     public void afficheLaSituation() {
         String s = "\n";
-        for(int i=this.etages.length-1 ; i>=0;i--) {
+        for (int i = this.etages.length - 1; i >= 0; i--) {
             s += this.etages[i].affiche(cabine.getEtage());
         }
-        
+
         s += cabine.toString();
         s += "Distance parcourue : " + cabine.getDistanceParcourue() + "\n";
         s += "Nombre de passagers descendus : " + cabine.getNombrePassagersSorties() + "\n";
@@ -117,6 +126,5 @@ public class Ascenseur {
     public void setNumEtageLePlusHaut(int numEtageLePlusHaut) {
         this.numEtageLePlusHaut = numEtageLePlusHaut;
     }
-    
-    
+
 }

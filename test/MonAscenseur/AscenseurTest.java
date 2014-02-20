@@ -63,4 +63,37 @@ public class AscenseurTest {
         a.afficheLaSituation();
     }
     
+    @Test
+    public void testGetEtateSuperieur() {
+        setUp();
+        Cabine c = a.getCabine();
+        System.out.println("GetEtageSuperieur");
+        assertEquals(c.getEtage().getNumero(), 5);
+        
+        Etage e = a.getEtageSuivant(c.getEtage());
+        assertEquals(e.getNumero(), 6);
+        
+        e = a.getEtageSuivant(e);
+        assertEquals(e, null);
+        
+        c.setEtage(new Etage(2));
+        e = a.getEtagePrecedant(c.getEtage());
+        assertEquals(e.getNumero(), 1);
+        
+        e = a.getEtagePrecedant(e);
+        assertEquals(e.getNumero(), 0);
+        
+        e = a.getEtagePrecedant(e);
+        assertEquals(e.getNumero(), -1);
+        
+        Etage testNull = a.getEtagePrecedant(e);
+        assertEquals(testNull, null);
+        
+        e = a.getEtageSuivant(e);
+        assertEquals(e.getNumero(), 0);
+        
+        e = a.getEtageSuivant(e);
+        assertEquals(e.getNumero(), 1);
+    }
+    
 }
