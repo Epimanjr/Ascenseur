@@ -30,7 +30,7 @@ public class EvenementArrivee extends Evenement {
 
     @Override
     public void traiter(Echeancier e, Ascenseur a) {
-        int calculDate = date + a.getCabine().getEtage().getArrivees().suivant();
+        //int calculDate = date + a.getCabine().getEtage().getArrivees().suivant();
   
         //Ajout du passager à la file d'attente du palier
         Etage etageDepart = this.passager.getEtageDepart();
@@ -38,11 +38,11 @@ public class EvenementArrivee extends Evenement {
         
         //On remet la cabine en mouvement si elle est à l'arrêt (-)
         if(!a.getCabine().enMouvement()) {
-            a.getCabine().demarrer(e, calculDate);
+            a.getCabine().demarrer(e, this.date+1, this.passager);
         }
         
         //Ajout de l'événement à l'échéancier
-        e.ajouter(new EvenementArrivee(calculDate));
+        e.ajouter(new EvenementArrivee(this.date+1));
     }
     
     /**
