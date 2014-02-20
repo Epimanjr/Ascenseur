@@ -98,6 +98,7 @@ public class Cabine {
     }
 
     public void remplirCabine(LinkedList list) {
+        System.out.println(getColor(91)+"Remplissage de la cabine"+getColor(0));
         boolean cabineVide = this.estVide();
         int i = 0, et = 0; //et = étage
         Passager passager;
@@ -118,6 +119,8 @@ public class Cabine {
                 i++;
             }
         }
+        
+        System.out.println(getColor(91)+"Fin remplissage"+getColor(0));
     }
 
     @SuppressWarnings("empty-statement")
@@ -132,6 +135,7 @@ public class Cabine {
     }
 
     public void action(Echeancier e, Etage etage, int date) {
+        System.out.println(getColor(91)+"Début traitement PCP"+getColor(0));
         //La cabine change d'étage
         this.setEtage(etage);
 
@@ -171,6 +175,8 @@ public class Cabine {
             this.setPriorite('-');
         }
 
+        
+        System.out.println(getColor(91)+"FIN traitement PCP"+getColor(0));
     }
 
     /**
@@ -181,27 +187,36 @@ public class Cabine {
      * @return
      */
     public boolean traiterAppelsExternes(Echeancier e, int date) {
+        System.out.println(getColor(91)+"Début Traiter appels externes"+getColor(0));
         if (this.getPriorite() == '^') {
             //On parcourt les étages supérieurs
-            Etage et;
-            while ((et = this.ascenseur.getEtageSuivant(this.getEtage())) != null) {
+            Etage et = this.getEtage();
+            while ((et = this.ascenseur.getEtageSuivant(et)) != null) {
+                System.out.println(getColor(91)+"while - externes - 1"+getColor(0));
                 //Si des gens attendent sur le palier
                 if (et.getFileAttente().size() > 0) {
                     e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtageSuivant(etage)));
+                    
+                    System.out.println(getColor(91)+"Fin traiter appels externes"+getColor(0));
                     return true;
                 }
             }
         } else if (this.getPriorite() == 'v') {
             //On parcourt les étages inférieurs
-            Etage et;
-            while ((et = this.ascenseur.getEtagePrecedant(this.getEtage())) != null) {
+            Etage et = this.getEtage();
+            while ((et = this.ascenseur.getEtagePrecedant(et))  != null) {
+                System.out.println("while - externes - 2");
                 //Si des gens attendent sur le palier
                 if (et.getFileAttente().size() > 0) {
                     e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtagePrecedant(etage)));
+                    
+                    System.out.println(getColor(91)+"Fin traiter appels externes"+getColor(0));
                     return true;
                 }
             }
         }
+        
+        System.out.println(getColor(91)+"Fin traiter appels externes - false"+getColor(0));
         return false;
     }
 
@@ -213,6 +228,8 @@ public class Cabine {
      * @return
      */
     public boolean traiterAppelsInternes(Echeancier e, int date) {
+        
+        System.out.println(getColor(91)+"Début traiter appels internes"+getColor(0));
 
         for (Passager passager : this.passagers) {
             if (passager != null) {
@@ -228,6 +245,7 @@ public class Cabine {
             }
         }
 
+        System.out.println(getColor(91)+"FIN traiter appels internes"+getColor(0));
         return false;
     }
 
@@ -276,12 +294,9 @@ public class Cabine {
     @Override
     public String toString() {
         String s = "Contenu de la cabine : ";
-        if (this.passagers[0] != null) {
-            s += this.passagers[0].toString();
-        }
-        for (int i = 1; i < this.passagers.length; i++) {
-            if (this.passagers[i] != null) {
-                s += ", " + this.passagers[i];
+        for(Passager p : this.getPassagers()) {
+            if(p != null) {
+                s += "//"+p.toString()+"\\";
             }
         }
         s += "\nPriorité de la cabine : " + this.getPriorite() + "\n";
@@ -364,6 +379,11 @@ public class Cabine {
         } else {
             this.setPriorite('v');
         }
+    }
+    
+    
+    public static String getColor(int i) {
+        return "\033[" + i + "m";
     }
 
 }
