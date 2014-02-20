@@ -8,7 +8,8 @@ package MonAscenseur;
 
 /**
  *
- * @author blaise
+ * @author Maxime Blaise
+ * @author Antoine Nosal
  */
 public class EvenementPassage extends Evenement {
     
