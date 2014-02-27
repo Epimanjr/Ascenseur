@@ -15,7 +15,7 @@ public class EvenementOuverture extends Evenement {
     public EvenementOuverture(int d) {
         super(d);
     }
-
+    
 /*
 Se produit au moment très précis où les portes de la cabine viennent juste de terminer leur ouverture.
 Cet événement est généré par le traitement d’un événement PCP quand la cabine doit s’arrêter.
