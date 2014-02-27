@@ -31,7 +31,7 @@ public class Principale {
 	while ( ! echeancier.estVide() ) {
 
             //Affichage du simulateur
-	    System.out.println("----- Etat actuel du simulateur -----");
+	    System.out.println("\n\n\n\n----- Etat actuel du simulateur -----");
 	    ascenseur.afficheLaSituation();
             echeancier.afficheLaSituation();
 
