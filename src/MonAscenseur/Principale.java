@@ -1,5 +1,7 @@
 package MonAscenseur;
 
+import java.io.IOException;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -35,11 +37,11 @@ public class Principale {
 	    ascenseur.afficheLaSituation();
             echeancier.afficheLaSituation();
 
-	    System.out.println("Taper sur Enter pour faire un nouveau pas de simulation.");
+	   System.out.println("Taper sur Enter pour faire un nouveau pas de simulation.");
 	    try {
 		int justePourAttendreIci = System.in.read();
 	    }
-	    catch (Exception e) {}
+	    catch (IOException e) {}
 
 	    Evenement evenement = echeancier.retourneEtEnlevePremier();
 	    evenement.traiter(echeancier, ascenseur);

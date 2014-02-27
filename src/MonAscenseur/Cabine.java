@@ -165,15 +165,23 @@ public class Cabine {
         System.out.println(getColor(91) + "Début traitement PCP" + getColor(0));
         
         //Remplissage de la cabine
-        this.remplirCabine(this.etage.getFileAttente());
-        
+        //this.remplirCabine(this.etage.getFileAttente());
         
         //La cabine change d'étage
          this.setEtage(etage);
 
         this.setDistanceParcourue(this.getDistanceParcourue() + 1);
-
-
+        
+        System.out.println("~~~((((Numéro de l'étage courant : "+this.etage.getNumero());
+        System.out.println("Plus haut : "+ascenseur.getNumEtageLePlusHaut());
+        System.out.println("Plus bas : "+ascenseur.getNumEtageLePlusBas());
+                
+        
+        if(this.etage.getNumero() == ascenseur.getNumEtageLePlusHaut() || this.etage.getNumero() == ascenseur.getNumEtageLePlusBas()) {
+            this.inversePriorite();
+        }
+        
+        
         //On fait descendre les passagers qui veulent aller à l'étage courant
         for (int i = 0; i < this.passagers.length; i++) {
             Passager p = this.passagers[i];
@@ -396,14 +404,19 @@ public class Cabine {
 
         int etageTraite = this.getEtage().getNumero();
         int etagePassager = p.getEtageDestination().getNumero();
+        
+        System.out.println("PRIORITE : "+this.getPriorite());
+        System.out.println("DESCEND : "+descend());
+        System.out.println("ETAGE PASSAGER : "+(etagePassager < etageTraite));
 
-        return etageTraite == min || etageTraite == max || (monte() && etagePassager > etageTraite) || (descend() && etagePassager < etageTraite) || !this.enMouvement() || this.estVide();
+        return (etageTraite == min || etageTraite == max || (monte() && etagePassager > etageTraite) || (descend() && etagePassager < etageTraite) || !this.enMouvement() || this.estVide());
     }
 
     /**
      * Inverse la priorité de la cabine.
      */
     public void inversePriorite() {
+        System.out.println("INVERSION !!");
         if (this.getPriorite() == 'v') {
             this.setPriorite('^');
         } else {

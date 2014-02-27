@@ -20,7 +20,7 @@ public class Ascenseur {
 
     public Ascenseur(int nombreEtage, int numEtageLePlusBas, Cabine cabine) {
         this.setNumEtageLePlusBas(numEtageLePlusBas);
-        this.setNumEtageLePlusHaut(numEtageLePlusBas + nombreEtage);
+        this.setNumEtageLePlusHaut(numEtageLePlusBas + nombreEtage - 1);
         this.cabine = cabine;
         setEtages(nombreEtage, numEtageLePlusBas);
     }
@@ -62,7 +62,7 @@ public class Ascenseur {
                 return true;
             }
         }
-        
+
         return false;
     }
 
