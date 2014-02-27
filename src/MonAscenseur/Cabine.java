@@ -9,7 +9,8 @@ import java.util.LinkedList;
  */
 /**
  *
- * @author blaise
+ * @author Maxime Blaise
+ * @author Antoine Nosal
  */
 public class Cabine {
 
@@ -29,11 +30,24 @@ public class Cabine {
      */
     private char priorite;
 
+    /**
+     * Représente l'asenseur dans lequel se trouve la cabine
+     */
     private Ascenseur ascenseur;
 
+    /**
+     * Représente la vitesse de la cabine.
+     */
     private int vitesse;
 
+    /**
+     * Distance parcourue de la cabine.
+     */
     private int distanceParcourue;
+    
+    /**
+     * Variable incrémentée dès qu'un passager est sorti de la cabine.
+     */
     private int nombrePassagersSorties;
 
     public Cabine(Etage etage, int vitesse) {
@@ -105,10 +119,20 @@ public class Cabine {
         return placeLibre;
     }
 
+    /**
+     * Pour tester si la cabine est vide ou non.
+     * 
+     * @return 
+     */
     public boolean estVide() {
         return this.nombrePassagers() == 0;
     }
 
+    /**
+     * Méthode qui se charge de remplir correctement la cabine.
+     * 
+     * @param list 
+     */
     public void remplirCabine(LinkedList list) {
         System.out.println(getColor(91) + "Remplissage de la cabine ~~ " + this.etage + getColor(0));
         boolean cabineVide = this.estVide();
@@ -139,6 +163,11 @@ public class Cabine {
         System.out.println(getColor(91) + "Fin remplissage" + getColor(0));
     }
 
+    /**
+     * Ajoute un passager dans la cabine.
+     * 
+     * @param p 
+     */
     @SuppressWarnings("empty-statement")
     public void ajoutePassager(Passager p) {
         System.out.println(getColor(91) + "Début Ajoute Passager" + getColor(0));
@@ -161,6 +190,13 @@ public class Cabine {
         System.out.println(getColor(91) + "Fin Ajoute passager" + getColor(0));
     }
 
+    /**
+     * Méthode appelée lors du traitement d'un PCP
+     * 
+     * @param e
+     * @param etage
+     * @param date 
+     */
     public void action(Echeancier e, Etage etage, int date) {
         System.out.println(getColor(91) + "Début traitement PCP" + getColor(0));
         
@@ -324,6 +360,11 @@ public class Cabine {
         this.vitesse = vitesse;
     }
 
+    /**
+     * Pour savoir si la cabine est à l'arrêt ou non.
+     * 
+     * @return 
+     */
     public boolean enMouvement() {
         return (this.priorite != '-');
     }
@@ -390,14 +431,30 @@ public class Cabine {
         this.priorite = priorite;
     }
 
+    /**
+     * Retourne vrai si la cabine est en train de monter.
+     * 
+     * @return 
+     */
     public boolean monte() {
         return this.getPriorite() == '^';
     }
 
+    /**
+     * Retourne vrai si la cabine est en train de descendre.
+     * 
+     * @return 
+     */
     public boolean descend() {
         return this.getPriorite() == 'v';
     }
 
+    /**
+     * Méthode pour savoir si on doit prendre un passager ou non.
+     * 
+     * @param p
+     * @return 
+     */
     private boolean doitPrendrePassager(Passager p) {
         int min = this.ascenseur.getNumEtageLePlusBas();
         int max = this.ascenseur.getNumEtageLePlusHaut();
@@ -424,6 +481,12 @@ public class Cabine {
         }
     }
 
+    /**
+     * Permet simplement de colorer le terminal LINUX.
+     * 
+     * @param i
+     * @return 
+     */
     public static String getColor(int i) {
         return "\033[" + i + "m";
     }

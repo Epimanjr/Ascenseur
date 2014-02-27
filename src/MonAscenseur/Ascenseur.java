@@ -7,21 +7,45 @@ package MonAscenseur;
  */
 /**
  *
- * @author blaise
+ * @author Maxime Blaise
+ * @author Antoine Nosal
  */
 public class Ascenseur {
 
+    /**
+     * Tableau d'étages, qui représente l'immeuble.
+     */
     private Etage[] etages;
 
+    /**
+     * Entier qui stocke le numéro de l'étage le plus haut.
+     */
     private int numEtageLePlusBas;
+    
+    /**
+     * Entier qui stocke le numéro de l'étage le plus bas.
+     */
     private int numEtageLePlusHaut;
 
+    /**
+     * Objet cabine, qui appartient à l'ascenseur.
+     */
     Cabine cabine;
 
+    /**
+     * Construit un ascenseur avec une cabine.
+     * 
+     * @param nombreEtage
+     * @param numEtageLePlusBas
+     * @param cabine 
+     */
     public Ascenseur(int nombreEtage, int numEtageLePlusBas, Cabine cabine) {
+        //Initialisation des attributs
         this.setNumEtageLePlusBas(numEtageLePlusBas);
         this.setNumEtageLePlusHaut(numEtageLePlusBas + nombreEtage - 1);
         this.cabine = cabine;
+        
+        //Modification du tableau d'étages
         setEtages(nombreEtage, numEtageLePlusBas);
     }
 
@@ -33,10 +57,6 @@ public class Ascenseur {
      */
     public Etage[] getEtages() {
         return etages;
-    }
-
-    public void setEtages(Etage[] etages) {
-        this.etages = etages;
     }
 
     /**
@@ -101,7 +121,6 @@ public class Ascenseur {
     /**
      * Méthode qui affiche l'ascenseur
      *
-     * @return
      */
     public void afficheLaSituation() {
         String s = "\n";
@@ -115,18 +134,38 @@ public class Ascenseur {
         System.out.println(s);
     }
 
+    /**
+     * Permet de récupérer le numéro de l'étage le plus bas.
+     * 
+     * @return 
+     */
     public int getNumEtageLePlusBas() {
         return numEtageLePlusBas;
     }
 
+    /**
+     * Modifie le numéro de l'étage le plus bas.
+     * 
+     * @param numEtageLePlusBas 
+     */
     public void setNumEtageLePlusBas(int numEtageLePlusBas) {
         this.numEtageLePlusBas = numEtageLePlusBas;
     }
 
+    /**
+     * Permet de récupérer le numéro de l'étage le plus haut.
+     * 
+     * @return 
+     */
     public int getNumEtageLePlusHaut() {
         return numEtageLePlusHaut;
     }
 
+     /**
+     * Modifie le numéro de l'étage le plus haut.
+     * 
+     * @param numEtageLePlusHaut 
+     */
     public void setNumEtageLePlusHaut(int numEtageLePlusHaut) {
         this.numEtageLePlusHaut = numEtageLePlusHaut;
     }
