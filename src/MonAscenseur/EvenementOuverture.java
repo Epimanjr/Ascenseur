@@ -26,15 +26,15 @@ Ceci permet de prédire l’événement FPC en fonction du nombre de personnes q
     
     @Override
     public void traiter(Echeancier e, Ascenseur a) {
-        //TODO
+        a.getCabine().actionApresOuverture(e, date);
     }
     
     /**
-     * Affichage d'un événement OPC.
+     * Affichage d'un événement OPC (Ouverture Porte Cabine).
      */
     @Override
     public void affiche() {
-        System.out.println("OPC");
+        System.out.println("["+date+", OPC]");
     }
     
 }

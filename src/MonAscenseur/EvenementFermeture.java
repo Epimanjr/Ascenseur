@@ -25,7 +25,7 @@ Attention au cas particulier ou l’immeuble serait vide (rare mais possible !).
     
     @Override
     public void traiter(Echeancier e, Ascenseur a) {
-        //TODO
+        a.getCabine().actionApresFermeture(e, date);
     }
     
     /**

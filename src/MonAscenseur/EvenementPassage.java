@@ -25,7 +25,7 @@ public class EvenementPassage extends Evenement {
 
     @Override
     public void traiter(Echeancier e, Ascenseur a) {
-        a.getCabine().action(e, etageSuivant, date);
+        a.getCabine().actionAvantOuverture(e, etageSuivant, date);
     }
 
     @Override
