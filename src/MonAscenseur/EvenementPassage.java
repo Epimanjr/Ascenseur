@@ -25,9 +25,9 @@ public class EvenementPassage extends Evenement {
 
     @Override
     public void traiter(Echeancier e, Ascenseur a) {
-        System.out.println("Début traitement PCP");
-        a.getCabine().actionAvantOuverture(e, etageSuivant, date);
-        System.out.println("Fin traitement PCP");
+        //a.getCabine().actionAvantOuverture(e, etageSuivant, date);
+        
+        a.getCabine().action(e, etageSuivant, date);
     }
 
     @Override

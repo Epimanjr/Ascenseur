@@ -19,7 +19,7 @@ public class Principale {
      */
     public static void main(String[] args) {
         //Création de la cabine
-        Cabine cabine = new Cabine(new Etage(6), 1);
+        Cabine cabine = new Cabine(new Etage(6), 2);
         //Initialisation de l'ascenseur
         Ascenseur ascenseur = new Ascenseur(8,-1, cabine);
         cabine.setAscenseur(ascenseur);

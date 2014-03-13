@@ -42,11 +42,12 @@ public class EvenementArrivee extends Evenement {
         
         //On remet la cabine en mouvement si elle est à l'arrêt (-)
         if(!a.getCabine().enMouvement()) {
-            a.getCabine().demarrer(e, this.date+1, this.passager);
+            a.getCabine().demarrer(e, this.date, this.passager);
         }
         
         //Ajout de l'événement à l'échéancier
-        e.ajouter(new EvenementArrivee(etageDepart.getArrivees().suivant()));
+        
+        e.ajouter(new EvenementArrivee(date + 1));
     }
     
     /**
@@ -54,7 +55,7 @@ public class EvenementArrivee extends Evenement {
      */
     @Override
     public void affiche() {
-        System.out.println("["+this.passager.getNumero() + ", APP], ");
+        System.out.println("["+date + ", APP], ");
     }
     
 }
