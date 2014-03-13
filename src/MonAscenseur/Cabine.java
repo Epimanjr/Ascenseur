@@ -44,7 +44,7 @@ public class Cabine {
      * Distance parcourue de la cabine.
      */
     private int distanceParcourue;
-    
+
     /**
      * Variable incrémentée dès qu'un passager est sorti de la cabine.
      */
@@ -55,13 +55,7 @@ public class Cabine {
 
         this.etage = etage;
         this.passagers = new Passager[8]; // 8 personnes dans la cabine
-        for (Passager p : this.passagers) {
-            if (p == null) {
-                System.out.println(getColor(96) + "\tPassager null !" + getColor(0));
-            } else {
-                System.out.println(getColor(96) + "\tPassager NOT null !" + getColor(0));
-            }
-        }
+
         this.priorite = '-';
         this.vitesse = vitesse;
     }
@@ -112,17 +106,15 @@ public class Cabine {
     }
 
     public int placeLibreDansCabine() {
-        System.out.println(getColor(96) + "\tNombre passagers :  !" + nombrePassagers() + getColor(0));
 
         int placeLibre = this.passagers.length - nombrePassagers();
-        System.out.println(getColor(96) + "\tPlace libre  :  !" + placeLibre + getColor(0));
         return placeLibre;
     }
 
     /**
      * Pour tester si la cabine est vide ou non.
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean estVide() {
         return this.nombrePassagers() == 0;
@@ -130,20 +122,17 @@ public class Cabine {
 
     /**
      * Méthode qui se charge de remplir correctement la cabine.
-     * 
-     * @param list 
+     *
+     * @param list
+     * @return 
      */
-    public void remplirCabine(LinkedList list) {
-        System.out.println(getColor(91) + "Remplissage de la cabine ~~ " + this.etage + getColor(0));
-        boolean cabineVide = this.estVide();
-        int i = 0, et = 0; //et = étage
-        Passager passager;
+    public int remplirCabine(LinkedList list) {
         
-        System.out.println(getColor(94)+"\t\tTaille file attente : "+list.size());
+        int i = 0, temps = 0;
+        Passager passager;
 
         //Tant qu'il y a de la place
         while ((placeLibreDansCabine() > 0) && (i < list.size())) {
-            System.out.println(getColor(94) + "\t\twhile - remplir" + getColor(0));
             //On parcourt la liste d'attente de l'étage !
 
             //On récupère le passager
@@ -151,26 +140,27 @@ public class Cabine {
 
             if (this.doitPrendrePassager(passager)) {
                 //Alors on ajoute le passager dans la cabine
-                System.out.println(getColor(92) + "\tDoit prendre passager !" + getColor(0));
                 this.ajoutePassager(passager);
                 //Et on l'enlève de la file d'attente
                 list.remove(i);
+                
+                // 4 dixième de seconde
+                temps += 4;
             } else {
                 i++;
             }
         }
 
-        System.out.println(getColor(91) + "Fin remplissage" + getColor(0));
+        return temps;
     }
 
     /**
      * Ajoute un passager dans la cabine.
-     * 
-     * @param p 
+     *
+     * @param p
      */
     @SuppressWarnings("empty-statement")
     public void ajoutePassager(Passager p) {
-        System.out.println(getColor(91) + "Début Ajoute Passager" + getColor(0));
         if (this.placeLibreDansCabine() > 0) {
 
             boolean ajoute = false;
@@ -179,45 +169,146 @@ public class Cabine {
                 if (this.passagers[it] == null) {
                     this.passagers[it] = p;
                     ajoute = true;
-                    System.out.println(getColor(92) + "\tPassager ajouté !" + getColor(0));
                 } else {
                     it++;
                 }
             }
 
         }
-
-        System.out.println(getColor(91) + "Fin Ajoute passager" + getColor(0));
     }
 
     /**
      * Méthode appelée lors du traitement d'un PCP
-     * 
+     *
      * @param e
      * @param etage
-     * @param date 
+     * @param date
      */
-    public void action(Echeancier e, Etage etage, int date) {
-        System.out.println(getColor(91) + "Début traitement PCP" + getColor(0));
-        
-        //Remplissage de la cabine
-        //this.remplirCabine(this.etage.getFileAttente());
-        
+    public void actionAvantOuverture(Echeancier e, Etage etage, int date) {
         //La cabine change d'étage
-         this.setEtage(etage);
+        this.setEtage(etage);
 
         this.setDistanceParcourue(this.getDistanceParcourue() + 1);
-        
-        System.out.println("~~~((((Numéro de l'étage courant : "+this.etage.getNumero());
-        System.out.println("Plus haut : "+ascenseur.getNumEtageLePlusHaut());
-        System.out.println("Plus bas : "+ascenseur.getNumEtageLePlusBas());
-                
-        
-        if(this.etage.getNumero() == ascenseur.getNumEtageLePlusHaut() || this.etage.getNumero() == ascenseur.getNumEtageLePlusBas()) {
+
+        if (this.etage.getNumero() == ascenseur.getNumEtageLePlusHaut() || this.etage.getNumero() == ascenseur.getNumEtageLePlusBas()) {
             this.inversePriorite();
         }
+
+        // Test OPC
+        if (doitOuvrirPorteCabine()) {
+            e.ajouter(new EvenementOuverture(date + 1));
+        } else {
+            actionApresFermeture(e, date);
+        }
+    }
+
+    /**
+     * Méthode appelé après l'ouverture des portes.
+     *
+     * @param e
+     * @param date
+     */
+    public void actionApresOuverture(Echeancier e, int date) {
+        // Temps total, arrêt, ouverture et 
+        int temps = 5;
+        //On fait descendre les passagers qui veulent aller à l'étage courant
+        for (int i = 0; i < this.passagers.length; i++) {
+            Passager p = this.passagers[i];
+            if (p != null) {
+                if (p.getEtageDestination().equals(etage)) {
+                    //Il veut aller ici
+                    this.passagers[i] = null;
+                    this.setNombrePassagersSorties(this.getNombrePassagersSorties() + 1);
+                    
+                    // 4 dixième de seconde
+                    temps += 4;
+                }
+            }
+        }
+
+        //Remplissage de la cabine
+        temps += this.remplirCabine(this.etage.getFileAttente());
         
-        
+        // Générer fermeture cabine
+        e.ajouter(new EvenementFermeture(date+temps));
+    }
+
+    /**
+     * Méthode appelée après la fermeture des portes (ou bien si la cabine n'a
+     * pas besoin de s'arrêter)
+     *
+     * @param e
+     * @param date
+     */
+    public void actionApresFermeture(Echeancier e, int date) {
+
+        // On traite une première fois les appels
+        boolean traiterAppels = traiter(e, date);
+
+        if (!traiterAppels) {
+            this.inversePriorite();
+            // Un seconde fois si jamais rien
+            traiterAppels = traiter(e, date);
+        }
+
+        //Si il n'y pas eu d'appels à traiter, cabine à l'arrêt
+        if (!traiterAppels) {
+            this.setPriorite('-');
+        }
+    }
+
+    public boolean doitOuvrirPorteCabine() {
+
+        // Si un passager veut aller à l'étage courant.
+        for (Passager p : this.passagers) {
+            if (p != null) {
+                if (p.getEtageDestination().equals(etage)) {
+                    //Il veut aller ici
+                    return true;
+                }
+            }
+        }
+
+        // Ou bien si un passager se trouve sur le palier
+        LinkedList list = this.getEtage().getFileAttente();
+        int i = 0;
+        Passager passager;
+
+        //Tant qu'il y a de la place
+        while ((placeLibreDansCabine() > 0) && (i < list.size())) {
+            //On parcourt la liste d'attente de l'étage !
+
+            //On récupère le passager
+            passager = (Passager) list.get(i);
+
+            if (this.doitPrendrePassager(passager)) {
+                return true;
+            } else {
+                i++;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Méthode appelée lors du traitement d'un PCP
+     *
+     * @param e
+     * @param etage
+     * @param date
+     */
+    public void action(Echeancier e, Etage etage, int date) {
+
+        //La cabine change d'étage
+        this.setEtage(etage);
+
+        this.setDistanceParcourue(this.getDistanceParcourue() + 1);
+
+        if (this.etage.getNumero() == ascenseur.getNumEtageLePlusHaut() || this.etage.getNumero() == ascenseur.getNumEtageLePlusBas()) {
+            this.inversePriorite();
+        }
+
         //On fait descendre les passagers qui veulent aller à l'étage courant
         for (int i = 0; i < this.passagers.length; i++) {
             Passager p = this.passagers[i];
@@ -235,18 +326,16 @@ public class Cabine {
 
         boolean traiterAppels = traiter(e, date);
 
-        if(!traiterAppels) {
+        if (!traiterAppels) {
             this.inversePriorite();
             traiterAppels = traiter(e, date);
         }
-        
+
         //Si il n'y pas eu d'appels à traiter, cabine à l'arrêt
         if (!traiterAppels) {
             this.setPriorite('-');
         }
 
-       
-        System.out.println(getColor(91) + "FIN traitement PCP" + getColor(0));
     }
 
     /**
@@ -257,19 +346,15 @@ public class Cabine {
      * @return
      */
     public boolean traiterAppelsExternes(Echeancier e, int date) {
-        System.out.println(getColor(91) + "Début Traiter appels externes" + getColor(0));
         if (this.getPriorite() == '^') {
             //On parcourt les étages supérieurs
             Etage et = this.getEtage();
             while ((et = this.ascenseur.getEtageSuivant(et)) != null) {
-                System.out.println(getColor(91) + "while - externes - 1" + getColor(0));
                 //Si des gens attendent sur le palier
                 if (et.getFileAttente().size() > 0) {
-                    
-                    System.out.println("Ajout PCP : "+etage);
+
                     e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtageSuivant(etage)));
 
-                    System.out.println(getColor(91) + "Fin traiter appels externes" + getColor(0));
                     return true;
                 }
             }
@@ -277,19 +362,14 @@ public class Cabine {
             //On parcourt les étages inférieurs
             Etage et = this.getEtage();
             while ((et = this.ascenseur.getEtagePrecedant(et)) != null) {
-                System.out.println("while - externes - 2");
                 //Si des gens attendent sur le palier
                 if (et.getFileAttente().size() > 0) {
-                    System.out.println("Ajout PCP : "+etage);
                     e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtagePrecedant(etage)));
-
-                    System.out.println(getColor(91) + "Fin traiter appels externes" + getColor(0));
                     return true;
                 }
             }
         }
 
-        System.out.println(getColor(91) + "Fin traiter appels externes - false" + getColor(0));
         return false;
     }
 
@@ -302,17 +382,13 @@ public class Cabine {
      */
     public boolean traiterAppelsInternes(Echeancier e, int date) {
 
-        System.out.println(getColor(91) + "Début traiter appels internes" + getColor(0));
-
         for (Passager passager : this.passagers) {
             if (passager != null) {
                 //S'il veut monter et que la cabine monte, => new PCP
                 if (passager.getEtageDestination().getNumero() > this.etage.getNumero() && this.getPriorite() == '^') {
-                    System.out.println("Ajout PCP : "+etage);
                     e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtageSuivant(etage)));
                     return true;
                 } else if (passager.getEtageDestination().getNumero() < this.etage.getNumero() && this.getPriorite() == 'v') {
-                    System.out.println("Ajout PCP : "+etage);
                     e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtagePrecedant(etage)));
                     return true;
                 }
@@ -320,7 +396,6 @@ public class Cabine {
             }
         }
 
-        System.out.println(getColor(91) + "FIN traiter appels internes" + getColor(0));
         return false;
     }
 
@@ -336,13 +411,11 @@ public class Cabine {
         if (p.getEtageDestination().getNumero() > this.etage.getNumero()) {
             this.setPriorite('^');
             //On crée l'évènement PCP sur l'étage suivant
-            System.out.println("Ajout PCP : démarrer ~~ "+etage);
             e.ajouter(new EvenementPassage(date, this.ascenseur.getEtageSuivant(this.getEtage())));
             //Sinon
         } else {
             this.setPriorite('v');
             //On crée l'évènement PCP sur l'étage précédant
-            System.out.println("Ajout PCP : démarrer ~~"+etage);
             e.ajouter(new EvenementPassage(date, this.ascenseur.getEtagePrecedant(this.getEtage())));
         }
     }
@@ -362,8 +435,8 @@ public class Cabine {
 
     /**
      * Pour savoir si la cabine est à l'arrêt ou non.
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean enMouvement() {
         return (this.priorite != '-');
@@ -433,8 +506,8 @@ public class Cabine {
 
     /**
      * Retourne vrai si la cabine est en train de monter.
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean monte() {
         return this.getPriorite() == '^';
@@ -442,8 +515,8 @@ public class Cabine {
 
     /**
      * Retourne vrai si la cabine est en train de descendre.
-     * 
-     * @return 
+     *
+     * @return
      */
     public boolean descend() {
         return this.getPriorite() == 'v';
@@ -451,9 +524,9 @@ public class Cabine {
 
     /**
      * Méthode pour savoir si on doit prendre un passager ou non.
-     * 
+     *
      * @param p
-     * @return 
+     * @return
      */
     private boolean doitPrendrePassager(Passager p) {
         int min = this.ascenseur.getNumEtageLePlusBas();
@@ -461,10 +534,6 @@ public class Cabine {
 
         int etageTraite = this.getEtage().getNumero();
         int etagePassager = p.getEtageDestination().getNumero();
-        
-        System.out.println("PRIORITE : "+this.getPriorite());
-        System.out.println("DESCEND : "+descend());
-        System.out.println("ETAGE PASSAGER : "+(etagePassager < etageTraite));
 
         return (etageTraite == min || etageTraite == max || (monte() && etagePassager > etageTraite) || (descend() && etagePassager < etageTraite) || !this.enMouvement() || this.estVide());
     }
@@ -473,7 +542,6 @@ public class Cabine {
      * Inverse la priorité de la cabine.
      */
     public void inversePriorite() {
-        System.out.println("INVERSION !!");
         if (this.getPriorite() == 'v') {
             this.setPriorite('^');
         } else {
@@ -483,9 +551,9 @@ public class Cabine {
 
     /**
      * Permet simplement de colorer le terminal LINUX.
-     * 
+     *
      * @param i
-     * @return 
+     * @return
      */
     public static String getColor(int i) {
         return "\033[" + i + "m";
@@ -493,20 +561,21 @@ public class Cabine {
 
     /**
      * Traite les appels internes et externes
+     *
      * @param e
      * @param date
-     * @return 
+     * @return
      */
     private boolean traiter(Echeancier e, int date) {
-        
+
         //On traite les appels internes en fonction de la priorité
         boolean res = traiterAppelsInternes(e, date);
-        if(!res) {
+        if (!res) {
             //Si c'est pas bon, on traite les appels externes en fonction de la priorité
             res = traiterAppelsExternes(e, date);
-       
+
         }
-        
+
         return res;
     }
 
