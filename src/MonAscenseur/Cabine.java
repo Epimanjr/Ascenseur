@@ -230,7 +230,7 @@ public class Cabine {
         temps += this.remplirCabine(this.etage.getFileAttente());
         
         // Générer fermeture cabine
-        e.ajouter(new EvenementFermeture(date+temps));
+        e.ajouter(new EvenementFermeture(date+1));
     }
 
     /**
@@ -241,6 +241,7 @@ public class Cabine {
      * @param date
      */
     public void actionApresFermeture(Echeancier e, int date) {
+        System.out.println("Cabine fermé !");
 
         // On traite une première fois les appels
         boolean traiterAppels = traiter(e, date);
@@ -407,6 +408,7 @@ public class Cabine {
      * @param p
      */
     public void demarrer(Echeancier e, int date, Passager p) {
+        System.out.println("Démarrage cabine");
         //S'il veut monter
         if (p.getEtageDestination().getNumero() > this.etage.getNumero()) {
             this.setPriorite('^');
@@ -418,6 +420,8 @@ public class Cabine {
             //On crée l'évènement PCP sur l'étage précédant
             e.ajouter(new EvenementPassage(date, this.ascenseur.getEtagePrecedant(this.getEtage())));
         }
+        
+        System.out.println("Fin démarrage");
     }
 
     /**

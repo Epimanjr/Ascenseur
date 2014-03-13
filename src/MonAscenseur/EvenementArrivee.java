@@ -14,7 +14,7 @@ package MonAscenseur;
  */
 public class EvenementArrivee extends Evenement {
     
-    private Passager passager;
+    private final Passager passager;
     
     /**
      * Constructeur qui se contente d'appeler le constructeur de sa classe parent.
@@ -30,12 +30,13 @@ public class EvenementArrivee extends Evenement {
 
     @Override
     public void traiter(Echeancier e, Ascenseur a) {
-        //int calculDate = date + a.getCabine().getEtage().getArrivees().suivant();
+      //int calculDate = date + a.getCabine().getEtage().getArrivees().suivant();
   
         //Ajout du passager à la file d'attente du palier
         Etage etageDepart = this.passager.getEtageDepart();
         
         if(!a.ajouterPassager(this.passager)) {
+            
             System.out.println("Erreur ajout passager !!!");
         }
         
@@ -45,7 +46,7 @@ public class EvenementArrivee extends Evenement {
         }
         
         //Ajout de l'événement à l'échéancier
-        e.ajouter(new EvenementArrivee(this.date+1));
+        e.ajouter(new EvenementArrivee(etageDepart.getArrivees().suivant()));
     }
     
     /**

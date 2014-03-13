@@ -30,6 +30,7 @@ public class Echeancier {
     public void ajouter (Evenement e) {
 	int pos = 0;
 	while ( pos < listeEvenements.size() ) {
+            
 	    if (((Evenement) listeEvenements.get(pos)).date > e.date) {
 		listeEvenements.add(pos, e);
 	    } else {
