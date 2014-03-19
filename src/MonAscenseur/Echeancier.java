@@ -31,15 +31,12 @@ public class Echeancier {
         int pos = 0;
         boolean ajoute = false;
         while (pos < listeEvenements.size()) {
-            //System.out.println("coucou");
             if (((Evenement) listeEvenements.get(pos)).date > e.date) {
                 listeEvenements.add(pos, e);
                 ajoute = true;
-                System.out.println("kiki");
                 break;
             } else {
                 pos++;
-                System.out.println("coco");
             }
         }
         if (!ajoute) {
