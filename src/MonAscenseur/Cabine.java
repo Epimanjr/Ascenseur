@@ -50,7 +50,7 @@ public class Cabine {
      */
     private int nombrePassagersSorties;
 
-    private boolean barbare;
+    private final boolean barbare;
 
     public Cabine(Etage etage, int vitesse, boolean modeBarbare) {
         //Initialisation de l'étage
