@@ -62,6 +62,9 @@ public class Cabine {
         this.vitesse = vitesse;
 
         this.barbare = modeBarbare;
+        if(this.barbare) {
+            System.out.println(getColor(91)+"Mode barbare lancé !"+getColor(0));
+        }
     }
 
     public int getNombrePassagersSorties() {
