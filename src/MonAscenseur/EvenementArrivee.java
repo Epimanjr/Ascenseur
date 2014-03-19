@@ -47,7 +47,7 @@ public class EvenementArrivee extends Evenement {
         
         //Ajout de l'événement à l'échéancier
         
-        e.ajouter(new EvenementArrivee(date + 1));
+        e.ajouter(new EvenementArrivee(date + etageDepart.getArrivees().suivant()));
     }
     
     /**
