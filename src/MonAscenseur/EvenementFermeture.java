@@ -35,7 +35,7 @@ public class EvenementFermeture extends Evenement {
      */
     @Override
     public void affiche() {
-        System.out.println("FPC");
+        System.out.println("["+date+", FPC]");
     }
 
 }
