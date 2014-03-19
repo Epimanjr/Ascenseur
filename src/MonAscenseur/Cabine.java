@@ -543,13 +543,14 @@ public class Cabine {
      * @return
      */
     private boolean doitPrendrePassager(Passager p) {
-        int min = this.ascenseur.getNumEtageLePlusBas();
+        /*int min = this.ascenseur.getNumEtageLePlusBas();
         int max = this.ascenseur.getNumEtageLePlusHaut();
 
         int etageTraite = this.getEtage().getNumero();
         int etagePassager = p.getEtageDestination().getNumero();
 
-        return (etageTraite == min || etageTraite == max || (monte() && etagePassager > etageTraite) || (descend() && etagePassager < etageTraite) || !this.enMouvement() || this.estVide());
+        return (etageTraite == min || etageTraite == max || (monte() && etagePassager > etageTraite) || (descend() && etagePassager < etageTraite) || !this.enMouvement() || this.estVide());*/
+        return true;
     }
 
     /**
