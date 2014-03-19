@@ -35,7 +35,7 @@ public class Etage {
     public Etage(int numero) {
         this.numero = numero;
         this.fileAttente = new LinkedList<>();
-        this.arrivees = new LoiDePoisson(2, 5);
+        this.arrivees = new LoiDePoisson(1, 6);
     }
     
     /**
