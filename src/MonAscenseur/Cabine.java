@@ -50,7 +50,9 @@ public class Cabine {
      */
     private int nombrePassagersSorties;
 
-    public Cabine(Etage etage, int vitesse) {
+    private boolean barbare;
+
+    public Cabine(Etage etage, int vitesse, boolean modeBarbare) {
         //Initialisation de l'étage
 
         this.etage = etage;
@@ -58,6 +60,8 @@ public class Cabine {
 
         this.priorite = '-';
         this.vitesse = vitesse;
+
+        this.barbare = modeBarbare;
     }
 
     public int getNombrePassagersSorties() {
@@ -544,13 +548,23 @@ public class Cabine {
      */
     private boolean doitPrendrePassager(Passager p) {
         /*int min = this.ascenseur.getNumEtageLePlusBas();
-        int max = this.ascenseur.getNumEtageLePlusHaut();
+         int max = this.ascenseur.getNumEtageLePlusHaut();
 
-        int etageTraite = this.getEtage().getNumero();
-        int etagePassager = p.getEtageDestination().getNumero();
+         int etageTraite = this.getEtage().getNumero();
+         int etagePassager = p.getEtageDestination().getNumero();
 
-        return (etageTraite == min || etageTraite == max || (monte() && etagePassager > etageTraite) || (descend() && etagePassager < etageTraite) || !this.enMouvement() || this.estVide());*/
-        return true;
+         return (etageTraite == min || etageTraite == max || (monte() && etagePassager > etageTraite) || (descend() && etagePassager < etageTraite) || !this.enMouvement() || this.estVide());*/
+        if (barbare) {
+            return true;
+        } else {
+            int min = this.ascenseur.getNumEtageLePlusBas();
+            int max = this.ascenseur.getNumEtageLePlusHaut();
+
+            int etageTraite = this.getEtage().getNumero();
+            int etagePassager = p.getEtageDestination().getNumero();
+
+            return (etageTraite == min || etageTraite == max || (monte() && etagePassager > etageTraite) || (descend() && etagePassager < etageTraite) || !this.enMouvement() || this.estVide());
+        }
     }
 
     /**

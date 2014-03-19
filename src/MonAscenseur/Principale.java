@@ -18,8 +18,16 @@ public class Principale {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        boolean barbare = false;
+        
+        if(args.length == 1) {
+            if(args[0].equals("-d")) {
+                barbare = true;
+            }
+        }
+        
         //Création de la cabine
-        Cabine cabine = new Cabine(new Etage(6), 2);
+        Cabine cabine = new Cabine(new Etage(6), 2, barbare);
         //Initialisation de l'ascenseur
         Ascenseur ascenseur = new Ascenseur(8,-1, cabine);
         cabine.setAscenseur(ascenseur);

@@ -34,7 +34,7 @@ public class AscenseurTest {
     
     @Before
     public void setUp() {
-        Cabine c = new Cabine(new Etage(5), 5);
+        Cabine c = new Cabine(new Etage(5), 5, false);
         a = new Ascenseur(8,-1, c);
     }
     
