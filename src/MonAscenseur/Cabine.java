@@ -124,10 +124,10 @@ public class Cabine {
      * Méthode qui se charge de remplir correctement la cabine.
      *
      * @param list
-     * @return 
+     * @return
      */
     public int remplirCabine(LinkedList list) {
-        
+
         int i = 0, temps = 0;
         Passager passager;
 
@@ -143,7 +143,7 @@ public class Cabine {
                 this.ajoutePassager(passager);
                 //Et on l'enlève de la file d'attente
                 list.remove(i);
-                
+
                 // 4 dixième de seconde
                 temps += 4;
             } else {
@@ -219,7 +219,7 @@ public class Cabine {
                     //Il veut aller ici
                     this.passagers[i] = null;
                     this.setNombrePassagersSorties(this.getNombrePassagersSorties() + 1);
-                    
+
                     // 4 dixième de seconde
                     temps += 4;
                 }
@@ -228,9 +228,9 @@ public class Cabine {
 
         //Remplissage de la cabine
         temps += this.remplirCabine(this.etage.getFileAttente());
-        
+
         // Générer fermeture cabine
-        e.ajouter(new EvenementFermeture(date+temps));
+        e.ajouter(new EvenementFermeture(date + temps));
     }
 
     /**
@@ -302,7 +302,7 @@ public class Cabine {
     public void action(Echeancier e, Etage etage, int date) {
 
         System.out.println("Début action");
-        
+
         //La cabine change d'étage
         this.setEtage(etage);
 
@@ -357,7 +357,7 @@ public class Cabine {
                 if (et.getFileAttente().size() > 0) {
 
                     System.out.println("Début ajouter appel externe 1");
-                    e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtageSuivant(etage)));
+                    e.ajouter(new EvenementPassage(date + getEtage().getArrivees().suivant(), this.ascenseur.getEtageSuivant(etage)));
                     System.out.println("Fin ajouter appel externe 1");
 
                     return true;
@@ -370,7 +370,7 @@ public class Cabine {
                 //Si des gens attendent sur le palier
                 if (et.getFileAttente().size() > 0) {
                     System.out.println("Début ajouter appel externe 2");
-                    e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtagePrecedant(etage)));
+                    e.ajouter(new EvenementPassage(date + getEtage().getArrivees().suivant(), this.ascenseur.getEtagePrecedant(etage)));
                     System.out.println("Fin ajouter appel externe 2");
                     return true;
                 }
@@ -394,12 +394,12 @@ public class Cabine {
                 //S'il veut monter et que la cabine monte, => new PCP
                 if (passager.getEtageDestination().getNumero() > this.etage.getNumero() && this.getPriorite() == '^') {
                     System.out.println("Début ajouter appel interne 1");
-                    e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtageSuivant(etage)));
+                    e.ajouter(new EvenementPassage(date + getEtage().getArrivees().suivant(), this.ascenseur.getEtageSuivant(etage)));
                     System.out.println("Fin ajouter appel interne 1");
                     return true;
                 } else if (passager.getEtageDestination().getNumero() < this.etage.getNumero() && this.getPriorite() == 'v') {
                     System.out.println("Début ajouter appel interne 2");
-                    e.ajouter(new EvenementPassage(date + 1, this.ascenseur.getEtagePrecedant(etage)));
+                    e.ajouter(new EvenementPassage(date + getEtage().getArrivees().suivant(), this.ascenseur.getEtagePrecedant(etage)));
                     System.out.println("Fin ajouter appel interne 2");
                     return true;
                 }
@@ -423,14 +423,14 @@ public class Cabine {
         if (p.getEtageDestination().getNumero() > this.etage.getNumero()) {
             this.setPriorite('^');
             //On crée l'évènement PCP sur l'étage suivant
-            e.ajouter(new EvenementPassage(date+1, this.ascenseur.getEtageSuivant(this.getEtage())));
+            e.ajouter(new EvenementPassage(date + getEtage().getArrivees().suivant(), this.ascenseur.getEtageSuivant(this.getEtage())));
             //Sinon
         } else {
             this.setPriorite('v');
             //On crée l'évènement PCP sur l'étage précédant
-            e.ajouter(new EvenementPassage(date+1, this.ascenseur.getEtagePrecedant(this.getEtage())));
+            e.ajouter(new EvenementPassage(date + getEtage().getArrivees().suivant(), this.ascenseur.getEtagePrecedant(this.getEtage())));
         }
-        
+
         System.out.println("Fin démarrage");
     }
 
