@@ -27,7 +27,7 @@ public class Principale {
         }
         
         //Création de la cabine
-        Cabine cabine = new Cabine(new Etage(6), 2, barbare);
+        Cabine cabine = new Cabine(new Etage(6), 10, barbare);
         //Initialisation de l'ascenseur
         Ascenseur ascenseur = new Ascenseur(8,-1, cabine);
         cabine.setAscenseur(ascenseur);

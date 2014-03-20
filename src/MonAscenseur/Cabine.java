@@ -25,8 +25,7 @@ public class Cabine {
     private final Passager[] passagers;
 
     /**
-     * Priorité de la cabine avec la codification : '-' : arrêtée '^' : monte
-     * 'v' : descend
+     * Priorité de la cabine avec la codification : '-' : arrêtée '^' : monte 'v' : descend
      */
     private char priorite;
 
@@ -56,14 +55,14 @@ public class Cabine {
         //Initialisation de l'étage
 
         this.etage = etage;
-        this.passagers = new Passager[8]; // 8 personnes dans la cabine
+        this.passagers = new Passager[3]; // 8 personnes dans la cabine
 
         this.priorite = '-';
         this.vitesse = vitesse;
 
         this.barbare = modeBarbare;
-        if(this.barbare) {
-            System.out.println(getColor(91)+"Mode barbare lancé !"+getColor(0));
+        if (this.barbare) {
+            System.out.println(getColor(91) + "Mode barbare lancé !" + getColor(0));
         }
     }
 
@@ -241,8 +240,7 @@ public class Cabine {
     }
 
     /**
-     * Méthode appelée après la fermeture des portes (ou bien si la cabine n'a
-     * pas besoin de s'arrêter)
+     * Méthode appelée après la fermeture des portes (ou bien si la cabine n'a pas besoin de s'arrêter)
      *
      * @param e
      * @param date
@@ -558,6 +556,7 @@ public class Cabine {
 
          return (etageTraite == min || etageTraite == max || (monte() && etagePassager > etageTraite) || (descend() && etagePassager < etageTraite) || !this.enMouvement() || this.estVide());*/
         if (barbare) {
+            System.out.println("                                    héhé");
             return true;
         } else {
             int min = this.ascenseur.getNumEtageLePlusBas();
